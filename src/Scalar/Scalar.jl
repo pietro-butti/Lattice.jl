@@ -2,14 +2,16 @@ module Scalar
     using ..Lattice
 
     # ============================= TYPES =============================
-    struct NScalarField{T,D,N}
+    struct NScalarField{T,D,N} # {precision, dimensions, components}
         conf::Array{T,3}
         NScalarField{T,N}(lattice::Grid{D,M,B,F}) where {T,N,D,M,B,F} = new{T,D,N}(
             Array{T,3}(undef,lattice.bsz, N, lattice.rsz)
         )
     end
     NScalarField{T}(n,lattice)     where T = NScalarField{T,n}(lattice)
-    ScalarField(::Type{T},lattice) where T = NScalarField{T}(1,lattice)
+
+    ScalarField{T,D}(lattice::Grid{D,M,B,F}) where {T,D,M,B,F} = NScalarField{T,1}(lattice)
+    ScalarField(::Type{T},lattice::Grid{D,M,B,F}) where {T,D,M,B,F} = ScalarField{T}(1,lattice)
     # =================================================================
     
     # ========================= INITIALIZATION =========================
@@ -22,11 +24,16 @@ module Scalar
     end
     # ==================================================================
     
-
-    # include("Scalar_observables.jl")
-
-
     export NScalarField, ScalarField
     export heatup!, freeze!
+
+    include("Scalar_Phi4.jl")
+    export Phi4_params
+    export action_krnl!, compute_action!, force_krnl!, compute_force!
+    export Phi4_workspace, leapfrog!, HMC!
+
+
+
+
 end
 
