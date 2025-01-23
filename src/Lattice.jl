@@ -13,7 +13,7 @@ module Lattice
             
     include("Scalar/Scalar.jl")
         using .Scalar
-        export NScalarField, ScalarField, heatup!, freeze!
+        export NScalarField, ScalarField, heatup!, freeze!, save, read!
         export Phi4_params, action_krnl!, compute_action!, force_krnl!, compute_force!, Phi4_workspace, leapfrog!, HMC!
 
     # include("Ising.jl")

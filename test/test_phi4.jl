@@ -8,7 +8,7 @@ using Lattice, Printf
 ##%
 
 # space = Grid{4}((32,32,32,32),(8,8,8,8))
-space = Grid{3}((32,32,32),(8,8,8))
+space = Grid{2}((32,32),(8,8))
 
 pars = Phi4_params(0.19, 1.3282)
 phi4 = Phi4_workspace(space)
