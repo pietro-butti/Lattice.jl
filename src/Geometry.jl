@@ -311,5 +311,4 @@ module Geometry
     export BC_PERIODIC, BC_OPEN, BC_SF_AFWB, BC_SF_ORBI
 
 
-
 end

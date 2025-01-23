@@ -101,7 +101,7 @@ end
 
 # DEFINE HMC FUNCTIONS =========================================
     function leapfrog!(ϕ::NScalarField{T,D,1}, params::Phi4_params{T}, int::IntrScheme{NI,T}, ws::Phi4_workspace{T,D}) where {T,D,NI}
-        @timeit "MD evolution" begin
+        @timeit "MD evolution (leapfrog)" begin
             for leap in 1:int.Nleaps
                 # update conf
                 ϕ.conf .= ϕ.conf .+ int.eps/convert(T,2) .* ws.mom.conf
@@ -112,7 +112,35 @@ end
                 
                 # update conf
                 ϕ.conf .= ϕ.conf .+ int.eps/convert(T,2) .* ws.mom.conf
-                println("cra cra") 
+                # println("cra cra") 
+            end
+        end
+        return nothing
+    end
+    
+    function omf2!(ϕ::NScalarField{T,D,1}, params::Phi4_params{T}, int::IntrScheme{NI,T}, ws::Phi4_workspace{T,D}) where {T,D,NI}
+        ξ    = convert(T,int.r[1])
+        half = convert(T,0.5) 
+        ee   = int.eps * params.κ / half
+        
+        @timeit "MD evolution (omf)" begin
+            for leap in 1:int.Nleaps
+                # ϕ ← ϕ + ξϵ*F[ϕ]
+                ϕ.conf .= ϕ.conf .+ (ξ*ee) .* ws.mom.conf
+                
+                # π ← π - ϵ/2 ϕ
+                ws.compute_force!(ws._scalar1, ϕ, params)
+                ws.mom.conf .= ws.mom.conf .- (half*ee) .* ws._scalar1.conf
+                
+                # ϕ ← ϕ + (1-2ξ)ϵ*F[ϕ]
+                ϕ.conf .= ϕ.conf .+ ((one(T)-ξ/half)*ee) .* ws.mom.conf
+                
+                # π ← π - ϵ/2 ϕ
+                ws.compute_force!(ws._scalar1, ϕ, params)
+                ws.mom.conf .= ws.mom.conf .- (half*ee) .* ws._scalar1.conf
+
+                # ϕ ← ϕ + ξϵ*F[ϕ]
+                ϕ.conf .= ϕ.conf .+ (ξ*ee) .* ws.mom.conf
             end
         end
         return nothing
@@ -139,13 +167,9 @@ end
             dH -= H
 
             # acc/rej
-            acc = true
-            pacc = exp(-dH)
-            if (pacc < 1.0)
-                if (pacc < rand()) 
-                    ϕ.conf .= ws._phi.conf # reject
-                    acc = false
-                end
+            acc = dH<=0 ? true : rand()<exp(-dH)
+            if !acc
+                ϕ.conf .= ws._phi.conf # reject
             end
 
             return dH, acc
