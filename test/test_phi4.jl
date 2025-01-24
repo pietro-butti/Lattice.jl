@@ -7,30 +7,16 @@ using Lattice, Printf
 
 ##%
 
-# space = Grid{4}((32,32,32,32),(8,8,8,8))
 space = Grid{2}((32,32),(8,8))
 
-pars = Phi4_params(0.19, 1.3282)
-phi4 = Phi4_workspace(space)
 
 ϕ = ScalarField(Float64,space)
-bin = ScalarField(Float64,space)
-freeze!(ϕ)
+heatup!(ϕ)
 
-int = omf2(Float64,0.01,10)
-
-
-accumulator = 0
-for _ in 1:10000
-
-    dH, acc = HMC!(ϕ,pars,int,phi4)
-    global accumulator += acc
-
-    mag = abs(sum(ϕ.conf))/prod(space.iL)
-    
-    out = @sprintf("dH=%6.3f (%s)     %10.8f", dH, acc ? "yes" : "noo", mag)
-
-    println(out)
+pic = Array{Float64,2}(undef,space.iL...)
+for b in 1:space.bsz
+    for r in 1:space.rsz
+        I = point_coord((b,r),space)
+        pic[I] = ϕ.conf[b,1,r]        
+    end
 end
-
-print_timer()

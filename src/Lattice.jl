@@ -15,7 +15,9 @@ module Lattice
         using .Scalar
         export NScalarField, ScalarField, heatup!, freeze!, save, read!
         export Phi4_params, action_krnl!, compute_action!, force_krnl!, compute_force!, Phi4_workspace, leapfrog!, HMC!
+        export to_pic
 
+        
     # include("Ising.jl")
     #     using .IsingModel
     #     export SpinField, behold

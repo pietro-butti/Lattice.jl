@@ -13,5 +13,8 @@ module Scalar
         export action_krnl!, compute_action!, force_krnl!, compute_force!
         export Phi4_workspace, leapfrog!, HMC!
 
+    include("Scalar_maps.jl")
+        export to_pic
+
 end
 
