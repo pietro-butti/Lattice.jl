@@ -1,12 +1,12 @@
 module Scalar
     using ..Geometry
+    using ..Fields
     using ..MolecularDynamics
     using TimerOutputs, Random, JLD2
 
-    include("Scalar_types.jl")
-        export NScalarField, ScalarField
-        export heatup!, freeze!
-        export save, read!
+    NScalarField(::Type{T}, N, lattice::Grid{D,M,B,F}) where {T,D,M,B,F} = Field{T,D,N}(lattice)
+    ScalarField(::Type{T},     lattice::Grid{D,M,B,F}) where {T,D,M,B,F} = Field{T,D,1}(lattice)
+    export NScalarField, ScalarField, scemo
 
     include("Scalar_Phi4.jl")
         export Phi4_params

@@ -26,3 +26,6 @@ Manifest.toml
 .vscode/*
 
 test/Ising*
+test/buffer_ignore
+
+.DS_store

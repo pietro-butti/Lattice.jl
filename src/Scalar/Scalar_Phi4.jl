@@ -9,8 +9,9 @@ struct Phi4_params{T}
     λ::T
 end
 
+
 # DEFINE ACTION=================================================
-    function action_krnl!(action::NScalarField{T,D,1}, ϕ::NScalarField{T,D,1}, coord::NTuple{2}, params::Phi4_params{T}, lattice::Grid{D,M,B,F}) where {T,D,B,F,M}
+    function action_krnl!(action::Field{Tf,D,1}, ϕ::Field{Tf,D,1}, coord::NTuple{2}, params::Phi4_params{T}, lattice::Grid{D,M,B,F}) where {Tf,T,D,B,F,M}
         # Fetch local field component
         (b,r) = coord
         ϕₙ  = ϕ.conf[b,1,r]
@@ -31,8 +32,8 @@ end
         return nothing
     end
 
-    function compute_action!(act::NScalarField{T,D,1}, ϕ::NScalarField{T,D,1}, params::Phi4_params{T}, lattice::Grid{D,M,B,F}) where {T,D,B,F,M}
-        @timeit "ϕ⁴ action computation" begin
+    function compute_action!(act::Field{Tf,D,1}, ϕ::Field{Tf,D,1}, params::Phi4_params{T}, lattice::Grid{D,M,B,F}) where {Tf,T,D,B,F,M}
+        @timeit "λϕ⁴ action computation" begin
             for b in 1:lattice.bsz
                 for r in 1:lattice.rsz
                     action_krnl!(act,ϕ,(b,r),params,lattice)
@@ -42,7 +43,7 @@ end
         return  nothing
     end
 # DEFINE FORCE =================================================
-    function force_krnl!(force::NScalarField{T,D,1}, ϕ::NScalarField{T,D,1}, coord::NTuple{2}, params::Phi4_params{T}, lattice::Grid{D,M,B,F}) where {T,D,B,F,M}
+    function force_krnl!(force::Field{Tf,D,1}, ϕ::Field{Tf,D,1}, coord::NTuple{2}, params::Phi4_params{T}, lattice::Grid{D,M,B,F}) where {Tf,T,D,B,F,M}
         # Fetch local field component
         (b,r) = coord
         ϕₙ  = ϕ.conf[b,1,r]
@@ -63,8 +64,8 @@ end
         return nothing
     end
 
-    function compute_force!(fc::NScalarField{T,D,1}, ϕ::NScalarField{T,D,1}, params::Phi4_params{T}, lattice::Grid{D,M,B,F}) where {T,D,B,F,M}
-        @timeit "ϕ⁴ force computation" begin
+    function compute_force!(fc::Field{Tf,D,1}, ϕ::Field{Tf,D,1}, params::Phi4_params{T}, lattice::Grid{D,M,B,F}) where {Tf,T,D,B,F,M}
+        @timeit "λϕ⁴ force computation" begin
             for b in 1:lattice.bsz
                 for r in 1:lattice.rsz
                     force_krnl!(fc,ϕ,(b,r),params,lattice)
@@ -77,10 +78,10 @@ end
 
 # DEFINE WORKSPACE =============================================
     struct Phi4_workspace{T,D}
-        _phi::NScalarField{T,D,1}
-        _scalar1::NScalarField{T,D,1}
-        _scalar2::NScalarField{T,D,1}
-        mom::NScalarField{T,D,1}
+        _phi::Field{T,D,1}
+        _scalar1::Field{T,D,1}
+        _scalar2::Field{T,D,1}
+        mom::Field{T,D,1}
 
         compute_action!::Function
         compute_force!::Function
@@ -100,7 +101,7 @@ end
 # ==============================================================
 
 # DEFINE HMC FUNCTIONS =========================================
-    function leapfrog!(ϕ::NScalarField{T,D,1}, params::Phi4_params{T}, int::IntrScheme{NI,T}, ws::Phi4_workspace{T,D}) where {T,D,NI}
+    function leapfrog!(ϕ::Field{T,D,1}, params::Phi4_params{Ty}, int::IntrScheme{NI,T}, ws::Phi4_workspace{T,D}) where {T,Ty,D,NI}
         @timeit "MD evolution (leapfrog)" begin
             for leap in 1:int.Nleaps
                 # update conf
@@ -118,7 +119,7 @@ end
         return nothing
     end
     
-    function omf2!(ϕ::NScalarField{T,D,1}, params::Phi4_params{T}, int::IntrScheme{NI,T}, ws::Phi4_workspace{T,D}) where {T,D,NI}
+    function omf2!(ϕ::Field{T,D,1}, params::Phi4_params{Ty}, int::IntrScheme{NI,T}, ws::Phi4_workspace{T,D}) where {T,Ty,D,NI}
         ξ    = convert(T,int.r[1])
         half = convert(T,0.5) 
         ee   = int.eps * params.κ / half
@@ -146,7 +147,7 @@ end
         return nothing
     end
 
-    function HMC!(ϕ::NScalarField{T,D,1}, params::Phi4_params{T}, int::IntrScheme{NI,T}, ws::Phi4_workspace{T,D}) where {T,D,NI}
+    function HMC!(ϕ::Field{T,D,1}, params::Phi4_params{Ty}, int::IntrScheme{NI,T}, ws::Phi4_workspace{T,D}) where {T,Ty,D,NI}
         @timeit "HMC trajectory" begin
             # copy the configuration
             ws._phi.conf .= ϕ.conf 
