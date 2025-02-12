@@ -1,7 +1,7 @@
 name = "Lattice"
 uuid = "d3735f9f-9cdb-4984-9fa1-47b4d39f9b75"
 authors = ["Pietro Butti <pietro.butti.fl@gmail.com>"]
-version = "0.1.0"
+version = "0.2.0"
 
 [deps]
 JLD2 = "033835bb-8acc-5ee8-8aae-3f567f8a3819"
