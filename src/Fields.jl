@@ -1,6 +1,6 @@
 module Fields
     using ..Geometry
-    using Random
+    using Random, JLD2
 
     struct Field{T,D,N} # dof type, dimensions, components
         conf::Array{T,3}

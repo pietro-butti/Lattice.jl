@@ -1,14 +1,10 @@
-using Pkg
-Pkg.activate("/Users/pietro/code/software/Lattice.jl")
-
-using Revise, TimerOutputs, Random
-using Lattice, Printf
-
-
-##%
+using Lattice
 
 space = Grid{2}((32,32),(8,8))
+pars = Phi4_params(0.3, 0.025)
+phi4 = Phi4_workspace(space)
+ϕ = ScalarField(Float64,space)
 
-u = GaugeField(U1{Float64},space)
-heatup!(u)
+heatup!(ϕ)
 
+save(ϕ,"scemo.hdf5")
