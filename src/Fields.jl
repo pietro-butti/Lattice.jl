@@ -26,6 +26,7 @@ module Fields
     
     # =============================== I/O ==============================
     function save(ϕ::Field{T,D,N}, name) where {T,D,N}
+        mkpath(dirname(name))
         jldsave("$name.jld2"; ϕ.conf)
         return nothing
     end
