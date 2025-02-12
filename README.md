@@ -19,10 +19,6 @@ To initialize the spacetime geometry structure one has to call the `Grid` struct
 - the number of dimensions `D` as the implicit type of the structure
 - a tuple with the lattice size in each dimension as an argument
 - a tuple with the lattice block sizes in each dimension as an argument
-  
-
-General rules: the length of the tuples must be the same and must coincide with the number of dimensions. The lattice sizes must be divisible for the block sizes).
-
 ```
 julia> space = Grid{2}((8,8),(4,4))
   Lattice dimensions:       2
@@ -31,6 +27,7 @@ julia> space = Grid{2}((8,8),(4,4))
   Thread block size:        4 x 4     [16] (Number of blocks: [4])
   Twist tensor: (0,)
 ```
+General rules: the length of the tuples must be the same and must coincide with the number of dimensions. The lattice sizes must be divisible for the block sizes).
 
 Given a point $(b,r)$ the neighbor points in the direction $\hat\mu$ can be found using the functions `up` and `dw`. As in the picture:
 

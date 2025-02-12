@@ -4,7 +4,7 @@ module Lattice
     include("Geometry.jl")
         using .Geometry
         export Grid
-        export up, dw, updw, point_coord
+        export up, dw, updw, point_coord, point_index
         export BC_PERIODIC
 
     include("Fields.jl")
@@ -31,6 +31,7 @@ module Lattice
         using .GaugeFields
         export GaugeField, heatup!
         export gauge_params, plaquette_krnl!, compute_plaquette!
+        export gauge_workspace, force_wilson_krnl!, compute_force_wilson!
         
     # include("Ising.jl")
     #     using .IsingModel

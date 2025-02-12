@@ -12,5 +12,8 @@ module GaugeFields
         export gauge_params
         export plaquette_krnl!, compute_plaquette! 
 
+    include("GaugeFields_hmc.jl")
+        export gauge_workspace
+        export force_wilson_krnl!, compute_force_wilson!
 
 end

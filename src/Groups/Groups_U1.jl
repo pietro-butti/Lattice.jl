@@ -71,8 +71,8 @@ isgroup(a::U1{T}) where T <: AbstractFloat = (abs(a.t) -1.0) < 1.0E-10
 
 Computes `exp(a)`
 """
-Base.exp(a::U1alg{T}) where T <: AbstractFloat = U1{T}(CUDA.cos(a.t), CUDA.sin(a.t))
-Base.exp(a::U1alg{T}, t::T) where T <: AbstractFloat  = U1{T}(CUDA.cos(t*a.t), CUDA.sin(t*a.t))
+Base.exp(a::U1alg{T}) where T <: AbstractFloat = U1{T}(cos(a.t), sin(a.t))
+Base.exp(a::U1alg{T}, t::T) where T <: AbstractFloat  = U1{T}(cos(t*a.t), sin(t*a.t))
 
 """
     function expm(g::U1, a::U1alg; t=1)
@@ -80,7 +80,7 @@ Base.exp(a::U1alg{T}, t::T) where T <: AbstractFloat  = U1{T}(CUDA.cos(t*a.t), C
 Computes `exp(a)*g`
 
 """
-expm(g::U1{T}, a::U1alg{T}) where T <: AbstractFloat = U1{T}(CUDA.cos(a.t), CUDA.sin(a.t))*g
-expm(g::U1{T}, a::U1alg{T}, t::T) where T <: AbstractFloat = U1{T}(CUDA.cos(t*a.t), CUDA.sin(t*a.t))*g
+expm(g::U1{T}, a::U1alg{T}) where T <: AbstractFloat = U1{T}(cos(a.t), sin(a.t))*g
+expm(g::U1{T}, a::U1alg{T}, t::T) where T <: AbstractFloat = U1{T}(cos(t*a.t), sin(t*a.t))*g
 
 export U1, U1alg, inverse, dag, tr, projalg, expm, exp, norm, norm2, isgroup
