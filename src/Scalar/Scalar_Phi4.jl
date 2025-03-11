@@ -7,6 +7,12 @@
 struct Phi4_params{T}
     κ::T
     λ::T
+    α::T
+end
+
+function ssb_params(κₗ::T, λₗ::T, μ²::T) where T
+    α = (μ²+λₗ)/2 + 2*κₗ
+    return Phi4_params(κₗ/α, λₗ/α, α)
 end
 
 
@@ -27,7 +33,7 @@ end
         Sₙ += -(params.κ+params.κ) * ϕₙ * staple 
 
         # Update local value
-        action.conf[b,1,r] = Sₙ
+        action.conf[b,1,r] = params.α * Sₙ
         
         return nothing
     end
@@ -42,6 +48,8 @@ end
         end
         return  nothing
     end
+# ==============================================================
+
 # DEFINE FORCE =================================================
     function force_krnl!(force::Field{Tf,D,1}, ϕ::Field{Tf,D,1}, coord::NTuple{2}, params::Phi4_params{T}, lattice::Grid{D,M,B,F}) where {Tf,T,D,B,F,M}
         # Fetch local field component
@@ -59,7 +67,7 @@ end
         Fₙ += -convert(T,2)*params.κ * staple 
 
         # Update local value
-        force.conf[b,1,r] = Fₙ
+        force.conf[b,1,r] = params.α * Fₙ
         
         return nothing
     end
