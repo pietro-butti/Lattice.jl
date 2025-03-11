@@ -9,7 +9,7 @@ module Scalar
     export NScalarField, ScalarField, scemo
 
     include("Scalar_Phi4.jl")
-        export Phi4_params
+        export Phi4_params, ssb_params
         export action_krnl!, compute_action!, force_krnl!, compute_force!
         export Phi4_workspace, leapfrog!, HMC!
 

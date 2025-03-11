@@ -23,7 +23,7 @@ module Lattice
             
     include("Scalar/Scalar.jl")
         using .Scalar
-        export NScalarField, ScalarField, scemo
+        export NScalarField, ScalarField, scemo, ssb_params
         export Phi4_params, action_krnl!, compute_action!, force_krnl!, compute_force!, Phi4_workspace, leapfrog!, HMC!
         export to_pic
 
