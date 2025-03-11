@@ -12,7 +12,7 @@ end
 
 function ssb_params(κₗ::T, λₗ::T, μ²::T) where T
     α = (μ²+λₗ)/2 + 2*κₗ
-    return Phi4_params(κₗ/α, λₗ/α, α)
+    return Phi4_params(κₗ/α, λₗ/α/4., α)
 end
 
 
