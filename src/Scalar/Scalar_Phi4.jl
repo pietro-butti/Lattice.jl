@@ -12,7 +12,8 @@ end
 
 function ssb_params(κₗ::T, λₗ::T, μ²::T) where T
     α = (μ²+λₗ)/2 + 2*κₗ
-    return Phi4_params(κₗ/α, λₗ/α/4., α)
+    # return Phi4_params(κₗ/α, λₗ/α/4., α)
+    return Phi4_params(κₗ/α/2., λₗ/α/4., α)
 end
 
 
@@ -87,6 +88,7 @@ end
 # DEFINE WORKSPACE =============================================
     struct Phi4_workspace{T,D}
         _phi::Field{T,D,1}
+        _bin::Field{T,D,1}
         _scalar1::Field{T,D,1}
         _scalar2::Field{T,D,1}
         mom::Field{T,D,1}
@@ -96,12 +98,13 @@ end
         
         function Phi4_workspace(::Type{T},lattice::Grid{D,M,B,F}) where {T,D,M,B,F}
             _phi  = ScalarField(T,lattice)
+            _bin  = ScalarField(T,lattice)
             _bin1 = ScalarField(T,lattice)
             _bin2 = ScalarField(T,lattice)
             _mom =  ScalarField(T,lattice)
             _S(act,phi,params) = compute_action!(act,phi,params,lattice)
             _F(frc,phi,params) = compute_force!(frc,phi,params,lattice) 
-            return new{T,D}(_phi,_bin1,_bin2,_mom,_S,_F)
+            return new{T,D}(_phi,_bin,_bin1,_bin2,_mom,_S,_F)
         end
         Phi4_workspace(lattice::Grid) = Phi4_workspace(Float64,lattice::Grid)
         

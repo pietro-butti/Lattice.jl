@@ -14,7 +14,7 @@ module Scalar
         export Phi4_workspace, leapfrog!, HMC!
 
     include("Scalar_maps.jl")
-        export to_pic
+        export conf_to_pic, pic_to_conf, pic_to_conf!
 
 end
 

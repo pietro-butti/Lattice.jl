@@ -29,3 +29,9 @@ test/Ising*
 test/buffer_ignore
 
 .DS_store
+
+
+
+
+applications/
+applications/*

@@ -9,7 +9,7 @@ module Lattice
 
     include("Fields.jl")
         using .Fields 
-        export Field, heatup!, freeze!, save, read
+        export Field, heatup!, freeze!, save, read!
 
     # include("Groups/Groups.jl")
     #     using .Groups
@@ -25,7 +25,7 @@ module Lattice
         using .Scalar
         export NScalarField, ScalarField, scemo, ssb_params
         export Phi4_params, action_krnl!, compute_action!, force_krnl!, compute_force!, Phi4_workspace, leapfrog!, HMC!
-        export to_pic
+        export conf_to_pic, pic_to_conf, pic_to_conf!
 
     # include("GaugeFields/GaugeFields.jl")
     #     using .GaugeFields
